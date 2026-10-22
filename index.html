@@ -1,0 +1,1396 @@
+<!doctype html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <title>Istruzioni Lavatrice - Assistente Lavaggio</title>
+    <meta name="description" content="Assistente pratico per la lavatrice: trascina i programmi orizzontalmente e cerca per capo con navigazione rapida." />
+    <meta property="og:title" content="Istruzioni Lavatrice - Assistente Lavaggio" />
+    <meta property="og:description" content="Trascina e naviga tra i programmi della lavatrice e consulta le note utili." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Mono:wght@700&display=swap" rel="stylesheet">
+
+    <style>
+      :root {
+        --bg-cream: #FBF7EE;
+        --card-bg: #FFFFFF;
+        --card-warm: #F8F3E8;
+        --header-blue: #7EA6C0;
+        --header-blue-dark: #638BA5;
+        --accent-pastel: #FBE8B3;
+        --accent-pastel-dark: #F3D58C;
+        --accent-border: #E5DCC9;
+        --accent-amber: #D9822B;
+        --text-main: #273444;
+        --text-muted: #5C6F84;
+        --text-subtle: #8492A6;
+        --font-serif: 'Playfair Display', Georgia, serif;
+        --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        --font-mono: 'Space Mono', monospace;
+        --shadow-card: 0 8px 24px -4px rgba(115, 157, 183, 0.22), 0 2px 8px rgba(0, 0, 0, 0.04);
+        --radius-lg: 16px;
+        --radius-xl: 22px;
+        --radius-pill: 9999px;
+      }
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family: var(--font-sans);
+        background-color: var(--bg-cream);
+        color: var(--text-main);
+        line-height: 1.65;
+        min-height: 100vh;
+        overflow-x: hidden;
+        background-image: radial-gradient(var(--accent-border) 0.75px, transparent 0.75px);
+        background-size: 24px 24px;
+        padding-bottom: 100px; /* space for bottom navigation bar */
+      }
+
+      /* Container */
+      .app-container {
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 18px 16px 28px;
+      }
+
+      /* Vintage Poster Header */
+      .poster-header {
+        background: linear-gradient(135deg, #89B3CD 0%, #739DB7 100%);
+        border-radius: var(--radius-xl);
+        padding: 24px 20px 22px;
+        color: white;
+        text-align: center;
+        box-shadow: 0 10px 25px -5px rgba(115, 157, 183, 0.35);
+        position: relative;
+        overflow: hidden;
+        margin-bottom: 20px;
+        border: 2px solid rgba(255, 255, 255, 0.45);
+      }
+
+      .poster-header::before {
+        content: "";
+        position: absolute;
+        inset: 4px;
+        border: 1px dashed rgba(255, 255, 255, 0.35);
+        border-radius: calc(var(--radius-xl) - 4px);
+        pointer-events: none;
+      }
+
+      .header-icon-badge {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 52px;
+        height: 52px;
+        background: rgba(255, 255, 255, 0.22);
+        backdrop-filter: blur(4px);
+        border: 1.5px solid rgba(255, 255, 255, 0.55);
+        border-radius: 14px;
+        margin-bottom: 10px;
+      }
+
+      .header-icon-badge svg {
+        width: 28px;
+        height: 28px;
+        fill: none;
+        stroke: white;
+        stroke-width: 2;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+      }
+
+      .poster-title {
+        font-family: var(--font-serif);
+        font-size: clamp(26px, 6vw, 34px);
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        line-height: 1.3;
+        margin-bottom: 6px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      }
+
+      .poster-subtitle {
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.55;
+        opacity: 0.95;
+      }
+
+      /* Section 1: Search Box */
+      .search-box {
+        background: var(--card-bg);
+        border-radius: var(--radius-lg);
+        padding: 16px 18px;
+        border: 1.5px solid var(--accent-border);
+        box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+        margin-bottom: 20px;
+        scroll-margin-top: 16px;
+      }
+
+      .search-box-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 13.5px;
+        font-weight: 700;
+        color: var(--header-blue-dark);
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.6px;
+      }
+
+      .search-input-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+      }
+
+      .search-icon {
+        position: absolute;
+        left: 14px;
+        width: 20px;
+        height: 20px;
+        color: var(--text-muted);
+        pointer-events: none;
+      }
+
+      .search-input {
+        width: 100%;
+        height: 48px;
+        padding: 0 42px 0 44px;
+        font-size: 15px;
+        border: 1.5px solid #D8D1BE;
+        border-radius: 12px;
+        background: #FAFAF7;
+        color: var(--text-main);
+        font-family: inherit;
+        outline: none;
+        transition: all 0.2s ease;
+      }
+
+      .search-input:focus {
+        border-color: var(--header-blue);
+        background: #FFFFFF;
+        box-shadow: 0 0 0 3px rgba(126, 166, 192, 0.2);
+      }
+
+      .search-clear {
+        position: absolute;
+        right: 12px;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: #E2E8F0;
+        border: none;
+        color: #64748B;
+        cursor: pointer;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 14px;
+      }
+
+      /* Common Garments Quick Pills */
+      .quick-garments-row {
+        display: flex;
+        gap: 8px;
+        overflow-x: auto;
+        padding-top: 12px;
+        padding-bottom: 2px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+      }
+
+      .quick-garments-row::-webkit-scrollbar {
+        display: none;
+      }
+
+      .garment-chip {
+        flex-shrink: 0;
+        background: var(--card-warm);
+        border: 1.5px solid var(--accent-border);
+        border-radius: var(--radius-pill);
+        padding: 8px 14px;
+        font-size: 13px;
+        font-weight: 500;
+        color: var(--text-main);
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        white-space: nowrap;
+        transition: all 0.15s ease;
+        min-height: 38px;
+      }
+
+      .garment-chip:hover, .garment-chip:active {
+        background: #F1E9D7;
+        border-color: #D2C6AB;
+      }
+
+      .garment-chip.active {
+        background: var(--header-blue);
+        border-color: var(--header-blue-dark);
+        color: white;
+        font-weight: 600;
+        box-shadow: 0 2px 6px rgba(115, 157, 183, 0.3);
+      }
+
+      /* Section 2: Horizontal Carousel Section */
+      .carousel-section {
+        position: relative;
+        margin-top: 8px;
+        margin-bottom: 22px;
+        scroll-margin-top: 16px;
+      }
+
+      .carousel-top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 10px;
+        padding: 0 4px;
+      }
+
+      .carousel-section-title {
+        font-family: var(--font-serif);
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .carousel-counter-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+
+      .carousel-counter {
+        font-size: 12.5px;
+        font-weight: 700;
+        color: var(--header-blue-dark);
+        font-family: var(--font-mono);
+        letter-spacing: 0.5px;
+      }
+
+      .carousel-nav-arrows {
+        display: flex;
+        gap: 6px;
+      }
+
+      .nav-arrow-btn {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        border: 1.5px solid var(--accent-border);
+        background: white;
+        color: var(--text-main);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.15s ease;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+      }
+
+      .nav-arrow-btn:hover {
+        background: var(--card-warm);
+        border-color: var(--header-blue);
+      }
+
+      .nav-arrow-btn:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+        pointer-events: none;
+      }
+
+      /* Horizontal Drag & Scroll Track */
+      .cards-scroll-track {
+        display: flex;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        gap: 16px;
+        padding: 8px 4px 16px;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        -webkit-overflow-scrolling: touch;
+        cursor: grab;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: pan-y pinch-zoom;
+      }
+
+      .cards-scroll-track.grabbing {
+        cursor: grabbing !important;
+        scroll-snap-type: none !important; /* smooth free dragging */
+      }
+
+      .cards-scroll-track::-webkit-scrollbar {
+        display: none;
+      }
+
+      /* Single Card */
+      .carousel-card {
+        flex: 0 0 100%;
+        max-width: 100%;
+        scroll-snap-align: center;
+        scroll-snap-stop: always;
+        background: var(--card-bg);
+        border: 2px solid var(--accent-border);
+        border-radius: var(--radius-xl);
+        box-shadow: var(--shadow-card);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+        user-select: none;
+      }
+
+      @media (min-width: 480px) {
+        .carousel-card {
+          flex: 0 0 92%;
+          max-width: 92%;
+        }
+      }
+
+      /* Card Header */
+      .card-header-banner {
+        background: linear-gradient(135deg, #F5EFE1 0%, #FAF6EE 100%);
+        border-bottom: 2px solid var(--accent-border);
+        padding: 20px 22px;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 14px;
+      }
+
+      .card-title-group h2 {
+        font-family: var(--font-serif);
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--text-main);
+        line-height: 1.35;
+        margin-bottom: 6px;
+      }
+
+      .card-title-group p {
+        font-size: 14.5px;
+        color: var(--text-muted);
+        font-weight: 500;
+        line-height: 1.5;
+      }
+
+      .badges-column {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+        flex-shrink: 0;
+      }
+
+      .badge-temperature {
+        background: var(--header-blue);
+        color: white;
+        font-family: var(--font-sans);
+        font-size: 14.5px;
+        font-weight: 700;
+        padding: 5px 12px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(115, 157, 183, 0.35);
+        white-space: nowrap;
+      }
+
+      .badge-centrifuge {
+        background: white;
+        border: 1px solid var(--accent-border);
+        color: var(--text-main);
+        font-family: var(--font-sans);
+        font-size: 12.5px;
+        font-weight: 600;
+        padding: 3px 10px;
+        border-radius: 6px;
+        white-space: nowrap;
+      }
+
+      /* Card Body */
+      .card-body-content {
+        padding: 22px 22px 26px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+
+      .detail-block {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .detail-label {
+        font-size: 12.5px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        color: var(--header-blue-dark);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      /* Capi Tags */
+      .capi-tags-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .tag-capo {
+        background: #F4F6F8;
+        border: 1px solid #E2E8F0;
+        color: #2D3748;
+        font-size: 14px;
+        font-weight: 500;
+        padding: 6px 12px;
+        border-radius: 8px;
+        line-height: 1.45;
+      }
+
+      .tag-capo.matched {
+        background: #FEF3C7;
+        border-color: #FCD34D;
+        color: #92400E;
+        font-weight: 700;
+        box-shadow: 0 0 0 2px #FDE68A;
+      }
+
+      .detail-text-box {
+        background: #FAF8F3;
+        border: 1.5px solid var(--accent-border);
+        border-radius: 12px;
+        padding: 13px 16px;
+        font-size: 14.5px;
+        color: var(--text-main);
+        line-height: 1.6;
+      }
+
+      .detersivi-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .detersivi-list li {
+        position: relative;
+        padding-left: 24px;
+        font-size: 14.5px;
+        line-height: 1.55;
+        font-weight: 600;
+        color: #1E3A8A;
+      }
+
+      .detersivi-list li::before {
+        content: "🧴";
+        position: absolute;
+        left: 0;
+        font-size: 13px;
+        top: 2px;
+      }
+
+      /* Carousel Pagination Dots */
+      .carousel-dots {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 10px;
+      }
+
+      .dot-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #D9D2BF;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        transition: all 0.2s ease;
+      }
+
+      .dot-indicator.active {
+        width: 24px;
+        border-radius: 10px;
+        background: var(--header-blue);
+      }
+
+      /* Drag/Swipe Hint */
+      .swipe-hint {
+        text-align: center;
+        font-size: 12.5px;
+        color: var(--text-muted);
+        margin-top: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 6px;
+        line-height: 1.5;
+      }
+
+      .swipe-hint-icon {
+        animation: nudge 2s infinite ease-in-out;
+      }
+
+      @keyframes nudge {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(5px); }
+      }
+
+      /* Section 3: Notes Section */
+      .notes-card {
+        background: #FFFDF7;
+        border: 2px dashed #D6C7A6;
+        border-radius: var(--radius-xl);
+        padding: 22px 20px;
+        margin-top: 18px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.03);
+        scroll-margin-top: 16px;
+      }
+
+      .notes-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 14px;
+        border-bottom: 1.5px solid #EFE4CC;
+        padding-bottom: 10px;
+      }
+
+      .notes-title {
+        font-family: var(--font-serif);
+        font-size: 18px;
+        font-weight: 700;
+        color: #794D18;
+        letter-spacing: 0.8px;
+        text-transform: uppercase;
+        line-height: 1.35;
+      }
+
+      .notes-list {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      .notes-item {
+        display: flex;
+        align-items: flex-start;
+        gap: 12px;
+        font-size: 14.5px;
+        color: #4A3A25;
+        font-weight: 500;
+        line-height: 1.6;
+      }
+
+      .notes-check {
+        width: 22px;
+        height: 22px;
+        border-radius: 50%;
+        background: #F9E7B5;
+        color: #8C5609;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        font-weight: 700;
+        flex-shrink: 0;
+        margin-top: 2px;
+      }
+
+      /* Empty State */
+      .empty-search {
+        background: white;
+        border: 2px dashed var(--accent-border);
+        border-radius: var(--radius-xl);
+        padding: 36px 16px;
+        text-align: center;
+        display: none;
+      }
+
+      .empty-search h3 {
+        font-family: var(--font-serif);
+        font-size: 18px;
+        margin-bottom: 6px;
+        color: var(--text-main);
+      }
+
+      .empty-search p {
+        font-size: 13.5px;
+        color: var(--text-muted);
+        margin-bottom: 14px;
+      }
+
+      .btn-reset-search {
+        background: var(--header-blue);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 10px 18px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      /* Bottom Navigation Bar */
+      .bottom-nav-bar {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-top: 1.5px solid var(--accent-border);
+        padding: 8px 16px;
+        padding-bottom: max(8px, env(safe-area-inset-bottom));
+        z-index: 1000;
+        box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+      }
+
+      .bottom-nav-inner {
+        max-width: 460px;
+        margin: 0 auto;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        gap: 8px;
+      }
+
+      .bottom-tab-btn {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: var(--text-muted);
+        padding: 6px 12px;
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        font-size: 11.5px;
+        font-weight: 600;
+        cursor: pointer;
+        min-height: 48px;
+        transition: all 0.15s ease;
+      }
+
+      .bottom-tab-btn svg {
+        width: 22px;
+        height: 22px;
+        transition: transform 0.15s ease;
+      }
+
+      .bottom-tab-btn:hover {
+        color: var(--header-blue-dark);
+      }
+
+      .bottom-tab-btn.active {
+        color: var(--header-blue-dark);
+        background: #F1F6F9;
+      }
+
+      .bottom-tab-btn.active svg {
+        transform: translateY(-1px);
+        stroke-width: 2.5;
+      }
+
+      /* Print Support */
+      @media print {
+        body { background: white; padding: 0; }
+        .search-box, .carousel-nav-arrows, .carousel-dots, .swipe-hint, .bottom-nav-bar { display: none !important; }
+        .cards-scroll-track { display: block !important; }
+        .carousel-card { margin-bottom: 20px; break-inside: avoid; }
+      }
+    </style>
+  </head>
+  <body>
+
+    <div class="app-container">
+      
+      <!-- Vintage-Modern Signboard Header -->
+      <header class="poster-header" id="section-top">
+        <div class="header-icon-badge">
+          <!-- Washing Machine SVG Icon -->
+          <svg viewBox="0 0 24 24">
+            <rect x="4" y="2" width="16" height="20" rx="3"></rect>
+            <circle cx="12" cy="13" r="5"></circle>
+            <circle cx="8" cy="6" r="1"></circle>
+            <circle cx="12" cy="6" r="1"></circle>
+            <path d="M12 10a3 3 0 0 0-3 3"></path>
+          </svg>
+        </div>
+        <h1 class="poster-title">Istruzioni Lavatrice</h1>
+        <p class="poster-subtitle">Trascina lateralmente per sfogliare i programmi o cerca per capo!</p>
+      </header>
+
+      <!-- Section: Search by Garment (Cerca per Capo) -->
+      <section class="search-box" id="section-cerca" aria-label="Cerca per capo">
+        <div class="search-box-header">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>Cerca per capo</span>
+        </div>
+
+        <div class="search-input-wrapper">
+          <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input 
+            type="text" 
+            id="searchInput" 
+            class="search-input" 
+            placeholder="Cosa devi lavare? (es. lenzuola, pantaloni, felpe, scarpe...)" 
+            autocomplete="off"
+            aria-label="Cerca capo da lavare"
+          />
+          <button id="searchClear" class="search-clear" onclick="clearSearch()" aria-label="Cancella ricerca">✕</button>
+        </div>
+
+        <!-- Fast Common Garments Chips -->
+        <div class="quick-garments-row" id="quickGarmentsBar">
+          <button class="garment-chip active" data-item="" onclick="filterByGarment('', this)">
+            ✨ Tutti i programmi
+          </button>
+          <button class="garment-chip" data-item="lenzuola" onclick="filterByGarment('lenzuola', this)">
+            🛏️ Lenzuola
+          </button>
+          <button class="garment-chip" data-item="asciugamani" onclick="filterByGarment('asciugamani', this)">
+            🧖 Asciugamani
+          </button>
+          <button class="garment-chip" data-item="pantaloni" onclick="filterByGarment('pantaloni', this)">
+            👖 Pantaloni
+          </button>
+          <button class="garment-chip" data-item="felpe" onclick="filterByGarment('felpe', this)">
+            🧥 Felpe & Maglie
+          </button>
+          <button class="garment-chip" data-item="reggiseni" onclick="filterByGarment('reggiseni', this)">
+            👙 Reggiseni
+          </button>
+          <button class="garment-chip" data-item="t-shirt" onclick="filterByGarment('t-shirt', this)">
+            👕 T-shirt
+          </button>
+          <button class="garment-chip" data-item="scarpe" onclick="filterByGarment('scarpe', this)">
+            👟 Scarpe
+          </button>
+          <button class="garment-chip" data-item="mocio" onclick="filterByGarment('mocio', this)">
+            🧹 Mocio & Tappeti
+          </button>
+          <button class="garment-chip" data-item="cuccia cane" onclick="filterByGarment('cuccia cane', this)">
+            🐕 Cuccia cane
+          </button>
+          <button class="garment-chip" data-item="divisa" onclick="filterByGarment('divisa', this)">
+            🥼 Divisa pea
+          </button>
+        </div>
+      </section>
+
+      <!-- Section: Horizontal Cards Carousel (Programmi) -->
+      <section class="carousel-section" id="section-programmi" aria-label="Programmi di lavaggio">
+        <div class="carousel-top-bar">
+          <h2 class="carousel-section-title">
+            <span>🧺</span> Programmi
+          </h2>
+          <div class="carousel-counter-wrapper">
+            <span id="carouselCounter" class="carousel-counter">PROGRAMMA 1 DI 5</span>
+            <div class="carousel-nav-arrows">
+              <button id="btnPrev" class="nav-arrow-btn" onclick="slideCarousel(-1)" aria-label="Scheda precedente">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+              </button>
+              <button id="btnNext" class="nav-arrow-btn" onclick="slideCarousel(1)" aria-label="Scheda successiva">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                  <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Scroll & Drag Track for Horizontal Cards -->
+        <div id="cardsScrollTrack" class="cards-scroll-track" title="Trascina orizzontalmente per scorrere">
+          <!-- Dynamically populated via JavaScript -->
+        </div>
+
+        <!-- Pagination Dots -->
+        <div id="carouselDots" class="carousel-dots">
+          <!-- Dynamically populated -->
+        </div>
+
+        <div class="swipe-hint">
+          <span class="swipe-hint-icon">👆</span>
+          <span>Trascina o scorri con il dito lateralmente</span>
+        </div>
+
+        <!-- Empty state if search returns nothing -->
+        <div id="emptySearchBox" class="empty-search">
+          <h3>Nessun programma corrispondente</h3>
+          <p>Nessun capo trovato per questa ricerca.</p>
+          <button class="btn-reset-search" onclick="clearSearch()">Mostra tutti i programmi</button>
+        </div>
+      </section>
+
+      <!-- Section: Important Notes (Note) -->
+      <section class="notes-card" id="section-note" aria-label="Note importanti">
+        <div class="notes-header">
+          <span style="font-size: 18px;">📋</span>
+          <h2 class="notes-title">Note Importanti</h2>
+        </div>
+        <ul class="notes-list" id="notesList">
+          <!-- Dynamically populated from laundryData.notes -->
+        </ul>
+      </section>
+
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav-bar" aria-label="Navigazione principale">
+      <div class="bottom-nav-inner">
+        <button class="bottom-tab-btn" id="navTabCerca" onclick="navigateToSection('section-cerca', 'cerca')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <span>Cerca Capo</span>
+        </button>
+
+        <button class="bottom-tab-btn active" id="navTabProgrammi" onclick="navigateToSection('section-programmi', 'programmi')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="4" y="2" width="16" height="20" rx="3"></rect>
+            <circle cx="12" cy="13" r="5"></circle>
+            <circle cx="8" cy="6" r="1"></circle>
+            <circle cx="12" cy="6" r="1"></circle>
+          </svg>
+          <span>Programmi</span>
+        </button>
+
+        <button class="bottom-tab-btn" id="navTabNote" onclick="navigateToSection('section-note', 'note')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+            <polyline points="14 2 14 8 20 8"></polyline>
+            <line x1="16" y1="13" x2="8" y2="13"></line>
+            <line x1="16" y1="17" x2="8" y2="17"></line>
+            <polyline points="10 9 9 9 8 9"></polyline>
+          </svg>
+          <span>Note</span>
+        </button>
+      </div>
+    </nav>
+
+    <!-- Application Script -->
+    <script>
+      // 1. DATA MODEL (Directly from the poster)
+      const laundryData = {
+        notes: [
+          "Controlla sempre se lo spruzzino è sgrassatore",
+          "Le magliette con i gingilli sul colletto vanno nella borsina media",
+          "I reggiseni vanno nella borsina triangolare grande (mai lanciati liberi in lavatrice)"
+        ],
+        programs: [
+          {
+            id: "tutto-60",
+            nome: "Tutto a 60°",
+            cosaLavare: "Biancheria resistente e divise",
+            dettagliCapi: ["lenzuola", "asciugamani", "intimo", "divisa pea", "canovacci"],
+            temperatura: "60°",
+            centrifuga: "800 / 1000 giri",
+            colori: "Chiari e bianchi",
+            detersivi: [
+              "Detersivo + ammorbidente",
+              "Ace Gentile o Vanish"
+            ],
+            tagColore: "blue"
+          },
+          {
+            id: "misti",
+            nome: "Misti (medio/molto sporco)",
+            cosaLavare: "Abbigliamento quotidiano misto",
+            dettagliCapi: ["pantaloni", "calzini", "intimo", "felpe/maglie", "reggiseni chiari*"],
+            temperatura: "30° (con stampe) / 40° (senza stampe)",
+            centrifuga: "800 giri",
+            colori: "Colori simili (NO ROSSI) - Usare foglietto acchiappacolore",
+            detersivi: [
+              "Detersivo + ammorbidente",
+              "Spruzzare sgrassatore sulle macchie"
+            ],
+            tagColore: "blue"
+          },
+          {
+            id: "scuri",
+            nome: "Capi Scuri",
+            cosaLavare: "Abbigliamento scuro",
+            dettagliCapi: ["pantaloni", "calzini", "intimo", "felpe/maglie", "reggiseni nella borsina triangolare grande*"],
+            temperatura: "30° (con stampe) / 40° (senza stampe)",
+            centrifuga: "800 giri",
+            colori: "Colori scuri (nero, blu, grigio scuro, rosso) - Usare acchiappacolore",
+            detersivi: [
+              "Detersivo per capi scuri (bottiglia nera)",
+              "Ammorbidente",
+              "Spruzzare sgrassatore sulle macchie"
+            ],
+            tagColore: "blue"
+          },
+          {
+            id: "rapido",
+            nome: "Rapido (15/30/45 min)",
+            cosaLavare: "Oggetti di casa e scarpe",
+            dettagliCapi: ["tappeti", "cuccia cane", "mocio", "scarpe"],
+            temperatura: "30/40° (30° per le scarpe)",
+            centrifuga: "800 giri (1000 per i tappeti)",
+            colori: "Tappeti e mocio insieme; scarpe nella retina grande",
+            detersivi: [
+              "Detersivo (poco poco), no ammorbidente",
+              "Cuccia: con disinfettante nella vaschetta + ammorbidente"
+            ],
+            tagColore: "blue"
+          },
+          {
+            id: "59min",
+            nome: "59 min (poco sporco)",
+            cosaLavare: "Capi leggeri da rinfrescare",
+            dettagliCapi: ["t-shirt e jeans da rinfrescare (non insieme)"],
+            temperatura: "30°",
+            centrifuga: "800 giri",
+            colori: "Segui tonalità cromatiche: scuri e rossi / chiari e tenui",
+            detersivi: ["Detersivo + ammorbidente"],
+            tagColore: "blue"
+          }
+        ]
+      };
+
+      // 2. STATE
+      let activeQuery = "";
+      let visiblePrograms = [...laundryData.programs];
+      let currentIndex = 0;
+
+      // 3. INITIALIZE
+      function initLaundryApp() {
+        renderNotes();
+        renderCards();
+        setupSearchInput();
+        setupScrollListener();
+        setupDragToScroll();
+        setupSectionObserver();
+      }
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initLaundryApp);
+      } else {
+        initLaundryApp();
+      }
+
+      // 4. RENDER NOTES (Without borsine visual cards)
+      function renderNotes() {
+        const notesContainer = document.getElementById("notesList");
+        if (!notesContainer) return;
+
+        notesContainer.innerHTML = laundryData.notes.map((note) => `
+          <li class="notes-item">
+            <span class="notes-check">✓</span>
+            <div>${highlightNote(note)}</div>
+          </li>
+        `).join("");
+      }
+
+      function highlightNote(text) {
+        return text
+          .replace("spruzzino è sgrassatore", "<strong>spruzzino è sgrassatore</strong>")
+          .replace("borsina media", "<strong>borsina media</strong>")
+          .replace("borsina triangolare grande", "<strong>borsina triangolare grande</strong>")
+          .replace("(mai lanciati liberi in lavatrice)", "<span style='color: #C0392B; font-weight:600;'>(mai lanciati liberi in lavatrice)</span>");
+      }
+
+      // 5. RENDER HORIZONTAL CARDS
+      function renderCards() {
+        const track = document.getElementById("cardsScrollTrack");
+        const dotsContainer = document.getElementById("carouselDots");
+        const emptyBox = document.getElementById("emptySearchBox");
+        const counter = document.getElementById("carouselCounter");
+
+        // Filter programs based on activeQuery
+        const query = activeQuery.toLowerCase().trim();
+        if (query) {
+          visiblePrograms = laundryData.programs.filter(program => {
+            const inCapi = program.dettagliCapi.some(capo => capo.toLowerCase().includes(query));
+            const inNome = program.nome.toLowerCase().includes(query);
+            const inCosa = program.cosaLavare.toLowerCase().includes(query);
+            const inColori = program.colori.toLowerCase().includes(query);
+            const inDetersivi = program.detersivi.some(d => d.toLowerCase().includes(query));
+            return inCapi || inNome || inCosa || inColori || inDetersivi;
+          });
+        } else {
+          visiblePrograms = [...laundryData.programs];
+        }
+
+        if (visiblePrograms.length === 0) {
+          track.innerHTML = "";
+          dotsContainer.innerHTML = "";
+          emptyBox.style.display = "block";
+          counter.textContent = "0 RISULTATI";
+          updateArrows();
+          return;
+        }
+
+        emptyBox.style.display = "none";
+        if (currentIndex >= visiblePrograms.length) {
+          currentIndex = 0;
+        }
+
+        // Render Cards
+        track.innerHTML = visiblePrograms.map((program, idx) => {
+          return `
+            <article class="carousel-card" id="card-${program.id}" data-index="${idx}">
+              <header class="card-header-banner">
+                <div class="card-title-group">
+                  <h2>${program.nome}</h2>
+                  <p>🎯 ${program.cosaLavare}</p>
+                </div>
+                <div class="badges-column">
+                  <span class="badge-temperature">🌡️ ${program.temperatura.split(' ')[0]}</span>
+                  <span class="badge-centrifuge">🔄 ${program.centrifuga.split(' ')[0]} rpm</span>
+                </div>
+              </header>
+
+              <div class="card-body-content">
+                <!-- Capi inclusi -->
+                <div class="detail-block">
+                  <div class="detail-label">
+                    <span>👕</span> Capi specifici
+                  </div>
+                  <div class="capi-tags-list">
+                    ${program.dettagliCapi.map(capo => {
+                      const isMatch = query && capo.toLowerCase().includes(query);
+                      return `<span class="tag-capo ${isMatch ? 'matched' : ''}">${capo}</span>`;
+                    }).join("")}
+                  </div>
+                </div>
+
+                <!-- Temperatura & Centrifuga -->
+                <div class="detail-block">
+                  <div class="detail-label">
+                    <span>🌡️</span> Temperatura & Centrifuga
+                  </div>
+                  <div class="detail-text-box">
+                    <strong>${program.temperatura}</strong> · Centrifuga: <strong>${program.centrifuga}</strong>
+                  </div>
+                </div>
+
+                <!-- Colori & Regole Cestello -->
+                <div class="detail-block">
+                  <div class="detail-label">
+                    <span>🎨</span> Colori & Consigli
+                  </div>
+                  <div class="detail-text-box">
+                    ${program.colori}
+                  </div>
+                </div>
+
+                <!-- Detersivi & Additivi -->
+                <div class="detail-block">
+                  <div class="detail-label">
+                    <span>🧴</span> Detersivi & Additivi
+                  </div>
+                  <div class="detail-text-box" style="background: #F4F8FA; border-color: #D3E2EC;">
+                    <ul class="detersivi-list">
+                      ${program.detersivi.map(d => `<li>${d}</li>`).join("")}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </article>
+          `;
+        }).join("");
+
+        // Render Dots
+        dotsContainer.innerHTML = visiblePrograms.map((_, idx) => `
+          <button class="dot-indicator ${idx === currentIndex ? 'active' : ''}" onclick="goToCard(${idx})" aria-label="Vai alla scheda ${idx + 1}"></button>
+        `).join("");
+
+        updateCounter();
+        updateArrows();
+
+        // Scroll cleanly to current card
+        goToCard(currentIndex, 'auto');
+      }
+
+      // 6. CAROUSEL NAVIGATION & DRAGGING (TRASICAMENTO LATERALE)
+      function goToCard(index, behavior = 'smooth') {
+        const track = document.getElementById("cardsScrollTrack");
+        const cards = track.querySelectorAll(".carousel-card");
+        if (cards[index]) {
+          currentIndex = index;
+          cards[index].scrollIntoView({ behavior, inline: 'center', block: 'nearest' });
+          updateDots();
+          updateCounter();
+          updateArrows();
+        }
+      }
+
+      function slideCarousel(direction) {
+        const nextIndex = currentIndex + direction;
+        if (nextIndex >= 0 && nextIndex < visiblePrograms.length) {
+          goToCard(nextIndex);
+        }
+      }
+
+      // DRAG-TO-SCROLL IMPLEMENTATION (Pointer & Touch Events)
+      function setupDragToScroll() {
+        const track = document.getElementById("cardsScrollTrack");
+        let isPointerDown = false;
+        let startX = 0;
+        let scrollStartLeft = 0;
+        let hasMoved = false;
+
+        track.addEventListener("pointerdown", (e) => {
+          // Allow only primary button
+          if (e.button !== 0 && e.pointerType === "mouse") return;
+          isPointerDown = true;
+          hasMoved = false;
+          startX = e.pageX;
+          scrollStartLeft = track.scrollLeft;
+          track.classList.add("grabbing");
+        });
+
+        window.addEventListener("pointermove", (e) => {
+          if (!isPointerDown) return;
+          const diffX = e.pageX - startX;
+          if (Math.abs(diffX) > 4) {
+            hasMoved = true;
+          }
+          track.scrollLeft = scrollStartLeft - diffX;
+        });
+
+        const stopDrag = (e) => {
+          if (!isPointerDown) return;
+          isPointerDown = false;
+          track.classList.remove("grabbing");
+
+          // When releasing, snap cleanly to nearest card
+          setTimeout(() => {
+            snapToNearestCard();
+          }, 40);
+        };
+
+        window.addEventListener("pointerup", stopDrag);
+        window.addEventListener("pointercancel", stopDrag);
+      }
+
+      function snapToNearestCard() {
+        const track = document.getElementById("cardsScrollTrack");
+        const cards = track.querySelectorAll(".carousel-card");
+        if (!cards.length) return;
+
+        const trackRect = track.getBoundingClientRect();
+        const trackCenter = trackRect.left + trackRect.width / 2;
+
+        let closestIndex = 0;
+        let minDistance = Infinity;
+
+        cards.forEach((card, idx) => {
+          const rect = card.getBoundingClientRect();
+          const cardCenter = rect.left + rect.width / 2;
+          const dist = Math.abs(trackCenter - cardCenter);
+          if (dist < minDistance) {
+            minDistance = dist;
+            closestIndex = idx;
+          }
+        });
+
+        goToCard(closestIndex, 'smooth');
+      }
+
+      function setupScrollListener() {
+        const track = document.getElementById("cardsScrollTrack");
+        let isScrollingTimeout;
+
+        track.addEventListener("scroll", () => {
+          if (track.classList.contains("grabbing")) return; // skip while dragging actively
+
+          clearTimeout(isScrollingTimeout);
+          isScrollingTimeout = setTimeout(() => {
+            const cards = track.querySelectorAll(".carousel-card");
+            if (!cards.length) return;
+
+            const trackRect = track.getBoundingClientRect();
+            const trackCenter = trackRect.left + trackRect.width / 2;
+
+            let closestIndex = 0;
+            let minDistance = Infinity;
+
+            cards.forEach((card, idx) => {
+              const rect = card.getBoundingClientRect();
+              const cardCenter = rect.left + rect.width / 2;
+              const distance = Math.abs(trackCenter - cardCenter);
+              if (distance < minDistance) {
+                minDistance = distance;
+                closestIndex = idx;
+              }
+            });
+
+            if (closestIndex !== currentIndex) {
+              currentIndex = closestIndex;
+              updateDots();
+              updateCounter();
+              updateArrows();
+            }
+          }, 60);
+        }, { passive: true });
+      }
+
+      function updateDots() {
+        const dots = document.querySelectorAll(".dot-indicator");
+        dots.forEach((dot, idx) => {
+          dot.classList.toggle("active", idx === currentIndex);
+        });
+      }
+
+      function updateCounter() {
+        const counter = document.getElementById("carouselCounter");
+        if (visiblePrograms.length > 0) {
+          counter.textContent = `PROGRAMMA ${currentIndex + 1} DI ${visiblePrograms.length}`;
+        } else {
+          counter.textContent = "0 PROGRAMMI";
+        }
+      }
+
+      function updateArrows() {
+        const btnPrev = document.getElementById("btnPrev");
+        const btnNext = document.getElementById("btnNext");
+        btnPrev.disabled = currentIndex === 0 || visiblePrograms.length <= 1;
+        btnNext.disabled = currentIndex === visiblePrograms.length - 1 || visiblePrograms.length <= 1;
+      }
+
+      // 7. SEARCH & QUICK PILLS
+      function setupSearchInput() {
+        const input = document.getElementById("searchInput");
+        const clearBtn = document.getElementById("searchClear");
+
+        input.addEventListener("input", (e) => {
+          activeQuery = e.target.value;
+          clearBtn.style.display = activeQuery ? "flex" : "none";
+          syncActiveChip(activeQuery);
+          renderCards();
+        });
+      }
+
+      function clearSearch() {
+        const input = document.getElementById("searchInput");
+        input.value = "";
+        activeQuery = "";
+        document.getElementById("searchClear").style.display = "none";
+        syncActiveChip("");
+        renderCards();
+        input.focus();
+      }
+
+      function filterByGarment(garment, chipBtn) {
+        const input = document.getElementById("searchInput");
+        input.value = garment;
+        activeQuery = garment;
+        document.getElementById("searchClear").style.display = garment ? "flex" : "none";
+        syncActiveChip(garment);
+        renderCards();
+
+        // Also scroll gently to the carousel so user sees results
+        const carousel = document.getElementById("section-programmi");
+        if (carousel) {
+          carousel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+
+      function syncActiveChip(garment) {
+        document.querySelectorAll(".garment-chip").forEach(chip => {
+          const itemVal = chip.getAttribute("data-item");
+          if (garment.toLowerCase().trim() === itemVal.toLowerCase().trim()) {
+            chip.classList.add("active");
+          } else {
+            chip.classList.remove("active");
+          }
+        });
+      }
+
+      // 8. BOTTOM NAVIGATION BAR LOGIC
+      function navigateToSection(sectionId, tabKey) {
+        const target = document.getElementById(sectionId);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setActiveNavTab(tabKey);
+          
+          if (tabKey === 'cerca') {
+            setTimeout(() => {
+              const input = document.getElementById("searchInput");
+              if (input) input.focus();
+            }, 300);
+          }
+        }
+      }
+
+      function setActiveNavTab(tabKey) {
+        document.getElementById("navTabCerca").classList.toggle("active", tabKey === 'cerca');
+        document.getElementById("navTabProgrammi").classList.toggle("active", tabKey === 'programmi');
+        document.getElementById("navTabNote").classList.toggle("active", tabKey === 'note');
+      }
+
+      // Auto update active bottom tab based on scroll position
+      function setupSectionObserver() {
+        const sections = [
+          { id: 'section-cerca', key: 'cerca' },
+          { id: 'section-programmi', key: 'programmi' },
+          { id: 'section-note', key: 'note' }
+        ];
+
+        window.addEventListener('scroll', () => {
+          const scrollPos = window.scrollY + 140;
+          let currentKey = 'programmi';
+
+          for (const s of sections) {
+            const el = document.getElementById(s.id);
+            if (el && el.offsetTop <= scrollPos) {
+              currentKey = s.key;
+            }
+          }
+          setActiveNavTab(currentKey);
+        }, { passive: true });
+      }
+
+      // Explicit global window bindings for inline HTML handlers
+      window.clearSearch = clearSearch;
+      window.filterByGarment = filterByGarment;
+      window.slideCarousel = slideCarousel;
+      window.goToCard = goToCard;
+      window.navigateToSection = navigateToSection;
+    </script>
+  </body>
+</html>

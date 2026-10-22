@@ -1,0 +1,6 @@
+{
+  "name": "Istruzioni Lavatrice - Assistente Lavaggio",
+  "description": "Assistente rapido e interattivo per la preparazione della lavatrice con checklist pre-lavaggio, ricerca rapida capi, programmi e regole.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
