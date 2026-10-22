@@ -18,10 +18,15 @@
     <style>
       :root {
         --bg-cream: #FBF7EE;
+        --bg-dot: #E5DCC9;
         --card-bg: #FFFFFF;
         --card-warm: #F8F3E8;
+        --card-header-bg: linear-gradient(135deg, #F5EFE1 0%, #FAF6EE 100%);
         --header-blue: #7EA6C0;
         --header-blue-dark: #638BA5;
+        --poster-gradient: linear-gradient(135deg, #89B3CD 0%, #739DB7 100%);
+        --poster-border: rgba(255, 255, 255, 0.45);
+        --poster-dashed: rgba(255, 255, 255, 0.35);
         --accent-pastel: #FBE8B3;
         --accent-pastel-dark: #F3D58C;
         --accent-border: #E5DCC9;
@@ -29,13 +34,85 @@
         --text-main: #273444;
         --text-muted: #5C6F84;
         --text-subtle: #8492A6;
-        --font-serif: 'Playfair Display', Georgia, serif;
-        --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-        --font-mono: 'Space Mono', monospace;
+        --tag-bg: #F4F6F8;
+        --tag-border: #E2E8F0;
+        --tag-color: #2D3748;
+        --tag-match-bg: #FEF3C7;
+        --tag-match-border: #FCD34D;
+        --tag-match-color: #92400E;
+        --input-bg: #FAFAF7;
+        --input-border: #D8D1BE;
+        --search-clear-bg: #E2E8F0;
+        --search-clear-color: #64748B;
+        --detail-box-bg: #FAF8F3;
+        --detersivi-box-bg: #F4F8FA;
+        --detersivi-border: #D3E2EC;
+        --detersivi-color: #1E3A8A;
+        --notes-bg: #FFFDF7;
+        --notes-border: #D6C7A6;
+        --notes-divider: #EFE4CC;
+        --notes-title: #794D18;
+        --notes-color: #4A3A25;
+        --notes-check-bg: #F9E7B5;
+        --notes-check-color: #8C5609;
+        --danger-text: #C0392B;
+        --nav-bg: rgba(255, 255, 255, 0.95);
+        --nav-btn-active: #F1F6F9;
+        --dot-bg: #D9D2BF;
         --shadow-card: 0 8px 24px -4px rgba(115, 157, 183, 0.22), 0 2px 8px rgba(0, 0, 0, 0.04);
         --radius-lg: 16px;
         --radius-xl: 22px;
         --radius-pill: 9999px;
+        --font-serif: 'Playfair Display', Georgia, serif;
+        --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+        --font-mono: 'Space Mono', monospace;
+      }
+
+      /* Dark Mode Palette - Optimized for high night readability and eye comfort */
+      body.dark-mode {
+        --bg-cream: #12161D;
+        --bg-dot: #252F3D;
+        --card-bg: #1A212B;
+        --card-warm: #222B38;
+        --card-header-bg: linear-gradient(135deg, #222D3A 0%, #1A232E 100%);
+        --header-blue: #5C8CAE;
+        --header-blue-dark: #8DB7D5;
+        --poster-gradient: linear-gradient(135deg, #203546 0%, #152430 100%);
+        --poster-border: rgba(141, 183, 213, 0.35);
+        --poster-dashed: rgba(141, 183, 213, 0.25);
+        --accent-pastel: #3D3520;
+        --accent-pastel-dark: #584926;
+        --accent-border: #2D3949;
+        --accent-amber: #E29B47;
+        --text-main: #F1F5F9;
+        --text-muted: #94A3B8;
+        --text-subtle: #64748B;
+        --tag-bg: #222C3A;
+        --tag-border: #324154;
+        --tag-color: #E2E8F0;
+        --tag-match-bg: #4A3A17;
+        --tag-match-border: #926E1E;
+        --tag-match-color: #FDE68A;
+        --input-bg: #1F2734;
+        --input-border: #334255;
+        --search-clear-bg: #334155;
+        --search-clear-color: #CBD5E1;
+        --detail-box-bg: #1D2531;
+        --detersivi-box-bg: #162432;
+        --detersivi-border: #243B52;
+        --detersivi-color: #93C5FD;
+        --notes-bg: #1A222D;
+        --notes-border: #4D3F27;
+        --notes-divider: #382F1F;
+        --notes-title: #F6CA7B;
+        --notes-color: #E2D7C5;
+        --notes-check-bg: #4A391A;
+        --notes-check-color: #FCD34D;
+        --danger-text: #F87171;
+        --nav-bg: rgba(18, 22, 29, 0.95);
+        --nav-btn-active: #222B38;
+        --dot-bg: #384659;
+        --shadow-card: 0 8px 24px -4px rgba(0, 0, 0, 0.5), 0 2px 8px rgba(0, 0, 0, 0.3);
       }
 
       * {
@@ -56,9 +133,21 @@
         line-height: 1.65;
         min-height: 100vh;
         overflow-x: hidden;
-        background-image: radial-gradient(var(--accent-border) 0.75px, transparent 0.75px);
-        background-size: 24px 24px;
         padding-bottom: 100px; /* space for bottom navigation bar */
+        position: relative;
+        transition: background-color 0.25s ease, color 0.25s ease;
+      }
+
+      body::before {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background-image: radial-gradient(var(--bg-dot) 0.75px, transparent 0.75px);
+        background-size: 24px 24px;
+        pointer-events: none;
+        z-index: -1;
+        transform: translateZ(0);
+        transition: background-image 0.25s ease;
       }
 
       /* Container */
@@ -70,7 +159,7 @@
 
       /* Vintage Poster Header */
       .poster-header {
-        background: linear-gradient(135deg, #89B3CD 0%, #739DB7 100%);
+        background: var(--poster-gradient);
         border-radius: var(--radius-xl);
         padding: 24px 20px 22px;
         color: white;
@@ -79,16 +168,72 @@
         position: relative;
         overflow: hidden;
         margin-bottom: 20px;
-        border: 2px solid rgba(255, 255, 255, 0.45);
+        border: 2px solid var(--poster-border);
+        transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
       }
 
       .poster-header::before {
         content: "";
         position: absolute;
         inset: 4px;
-        border: 1px dashed rgba(255, 255, 255, 0.35);
+        border: 1px dashed var(--poster-dashed);
         border-radius: calc(var(--radius-xl) - 4px);
         pointer-events: none;
+      }
+
+      /* Night / Dark Mode Toggle Button */
+      .theme-toggle-btn {
+        position: absolute;
+        top: 12px;
+        right: 12px;
+        background: rgba(255, 255, 255, 0.22);
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        border: 1.5px solid rgba(255, 255, 255, 0.5);
+        color: white;
+        padding: 6px 12px;
+        border-radius: var(--radius-pill);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        font-family: var(--font-sans);
+        font-size: 12px;
+        font-weight: 700;
+        cursor: pointer;
+        z-index: 10;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+        transition: all 0.2s ease;
+        user-select: none;
+        -webkit-user-select: none;
+      }
+
+      .theme-toggle-btn:hover {
+        background: rgba(255, 255, 255, 0.35);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+      }
+
+      .theme-toggle-btn:active {
+        transform: translateY(0);
+      }
+
+      .theme-toggle-icon {
+        font-size: 14px;
+        line-height: 1;
+        display: inline-block;
+        transition: transform 0.3s ease;
+      }
+
+      body.dark-mode .theme-toggle-btn {
+        background: rgba(18, 26, 36, 0.65);
+        border-color: rgba(141, 183, 213, 0.45);
+        color: #F1F5F9;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+      }
+
+      body.dark-mode .theme-toggle-btn:hover {
+        background: rgba(18, 26, 36, 0.9);
+        border-color: rgba(141, 183, 213, 0.7);
       }
 
       .header-icon-badge {
@@ -175,18 +320,23 @@
         height: 48px;
         padding: 0 42px 0 44px;
         font-size: 15px;
-        border: 1.5px solid #D8D1BE;
+        border: 1.5px solid var(--input-border);
         border-radius: 12px;
-        background: #FAFAF7;
+        background: var(--input-bg);
         color: var(--text-main);
         font-family: inherit;
         outline: none;
         transition: all 0.2s ease;
       }
 
+      .search-input::placeholder {
+        color: var(--text-subtle);
+        opacity: 0.9;
+      }
+
       .search-input:focus {
         border-color: var(--header-blue);
-        background: #FFFFFF;
+        background: var(--card-bg);
         box-shadow: 0 0 0 3px rgba(126, 166, 192, 0.2);
       }
 
@@ -196,14 +346,15 @@
         width: 26px;
         height: 26px;
         border-radius: 50%;
-        background: #E2E8F0;
+        background: var(--search-clear-bg);
         border: none;
-        color: #64748B;
+        color: var(--search-clear-color);
         cursor: pointer;
         display: none;
         align-items: center;
         justify-content: center;
         font-size: 14px;
+        transition: background 0.15s ease;
       }
 
       /* Common Garments Quick Pills */
@@ -240,8 +391,8 @@
       }
 
       .garment-chip:hover, .garment-chip:active {
-        background: #F1E9D7;
-        border-color: #D2C6AB;
+        background: var(--card-bg);
+        border-color: var(--header-blue);
       }
 
       .garment-chip.active {
@@ -302,7 +453,7 @@
         height: 36px;
         border-radius: 50%;
         border: 1.5px solid var(--accent-border);
-        background: white;
+        background: var(--card-bg);
         color: var(--text-main);
         display: flex;
         align-items: center;
@@ -325,84 +476,133 @@
 
       /* Horizontal Drag & Scroll Track */
       .cards-scroll-track {
+        position: relative;
         display: flex;
         overflow-x: auto;
+        overflow-y: hidden;
         scroll-snap-type: x mandatory;
         gap: 16px;
-        padding: 8px 4px 16px;
+        padding: 10px 16px 18px;
         scrollbar-width: none;
         -ms-overflow-style: none;
         -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        touch-action: pan-x pan-y;
         cursor: grab;
         user-select: none;
         -webkit-user-select: none;
-        touch-action: pan-y pinch-zoom;
+        /* Sfumatura morbida ai bordi laterali: addolcisce l'anteprima delle schede laterali senza tagli netti */
+        -webkit-mask-image: linear-gradient(
+          to right,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 1) 28px,
+          rgba(0, 0, 0, 1) calc(100% - 28px),
+          rgba(0, 0, 0, 0) 100%
+        );
+        mask-image: linear-gradient(
+          to right,
+          rgba(0, 0, 0, 0) 0%,
+          rgba(0, 0, 0, 1) 28px,
+          rgba(0, 0, 0, 1) calc(100% - 28px),
+          rgba(0, 0, 0, 0) 100%
+        );
       }
 
       .cards-scroll-track.grabbing {
         cursor: grabbing !important;
-        scroll-snap-type: none !important; /* smooth free dragging */
+        scroll-snap-type: none !important;
       }
 
       .cards-scroll-track::-webkit-scrollbar {
         display: none;
       }
 
-      /* Single Card */
+      /* Single Card con profondità e sfumatura per le schede ai lati */
       .carousel-card {
-        flex: 0 0 100%;
-        max-width: 100%;
+        flex: 0 0 88%;
+        max-width: 88%;
         scroll-snap-align: center;
-        scroll-snap-stop: always;
+        scroll-snap-stop: normal;
         background: var(--card-bg);
         border: 2px solid var(--accent-border);
         border-radius: var(--radius-xl);
-        box-shadow: var(--shadow-card);
+        box-shadow: 0 4px 14px -2px rgba(115, 157, 183, 0.15);
         overflow: hidden;
         display: flex;
         flex-direction: column;
-        transition: transform 0.2s ease, border-color 0.2s ease;
+        opacity: 0.45;
+        transform: scale(0.96);
+        transition: opacity 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+                    transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
+                    border-color 0.2s ease,
+                    box-shadow 0.3s ease,
+                    background 0.2s ease;
         user-select: none;
+        -webkit-user-select: none;
+        will-change: transform, opacity;
+        cursor: pointer;
       }
 
-      @media (min-width: 480px) {
+      .carousel-card.active-card {
+        opacity: 1;
+        transform: scale(1);
+        box-shadow: var(--shadow-card);
+        border-color: var(--accent-border);
+        cursor: default;
+      }
+
+      @media (min-width: 540px) {
         .carousel-card {
-          flex: 0 0 92%;
-          max-width: 92%;
+          flex: 0 0 85%;
+          max-width: 85%;
         }
       }
 
-      /* Card Header */
+      /* Card Header - Fixed uniform height across all programs */
       .card-header-banner {
-        background: linear-gradient(135deg, #F5EFE1 0%, #FAF6EE 100%);
+        background: var(--card-header-bg);
         border-bottom: 2px solid var(--accent-border);
-        padding: 20px 22px;
+        padding: 16px 20px;
         display: flex;
         justify-content: space-between;
-        align-items: flex-start;
-        gap: 14px;
+        align-items: center;
+        gap: 12px;
+        height: 118px;
+        min-height: 118px;
+        box-sizing: border-box;
+        transition: background 0.2s ease, border-color 0.2s ease;
+      }
+
+      .card-title-group {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-width: 0;
+        flex: 1;
       }
 
       .card-title-group h2 {
         font-family: var(--font-serif);
-        font-size: 22px;
+        font-size: clamp(17px, 4.3vw, 21px);
         font-weight: 700;
         color: var(--text-main);
-        line-height: 1.35;
-        margin-bottom: 6px;
+        line-height: 1.25;
+        margin-bottom: 4px;
+        word-break: break-word;
       }
 
       .card-title-group p {
-        font-size: 14.5px;
+        font-size: 13.5px;
         color: var(--text-muted);
         font-weight: 500;
-        line-height: 1.5;
+        line-height: 1.35;
       }
 
       .badges-column {
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+        justify-content: center;
         gap: 6px;
         flex-shrink: 0;
       }
@@ -411,22 +611,22 @@
         background: var(--header-blue);
         color: white;
         font-family: var(--font-sans);
-        font-size: 14.5px;
+        font-size: 13.5px;
         font-weight: 700;
-        padding: 5px 12px;
+        padding: 5px 10px;
         border-radius: 8px;
         box-shadow: 0 2px 4px rgba(115, 157, 183, 0.35);
         white-space: nowrap;
       }
 
       .badge-centrifuge {
-        background: white;
+        background: var(--card-warm);
         border: 1px solid var(--accent-border);
         color: var(--text-main);
         font-family: var(--font-sans);
-        font-size: 12.5px;
+        font-size: 12px;
         font-weight: 600;
-        padding: 3px 10px;
+        padding: 3px 9px;
         border-radius: 6px;
         white-space: nowrap;
       }
@@ -464,32 +664,39 @@
       }
 
       .tag-capo {
-        background: #F4F6F8;
-        border: 1px solid #E2E8F0;
-        color: #2D3748;
+        background: var(--tag-bg);
+        border: 1px solid var(--tag-border);
+        color: var(--tag-color);
         font-size: 14px;
         font-weight: 500;
         padding: 6px 12px;
         border-radius: 8px;
         line-height: 1.45;
+        transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
       }
 
       .tag-capo.matched {
-        background: #FEF3C7;
-        border-color: #FCD34D;
-        color: #92400E;
+        background: var(--tag-match-bg);
+        border-color: var(--tag-match-border);
+        color: var(--tag-match-color);
         font-weight: 700;
-        box-shadow: 0 0 0 2px #FDE68A;
+        box-shadow: 0 0 0 2px rgba(252, 211, 77, 0.35);
       }
 
       .detail-text-box {
-        background: #FAF8F3;
+        background: var(--detail-box-bg);
         border: 1.5px solid var(--accent-border);
         border-radius: 12px;
         padding: 13px 16px;
         font-size: 14.5px;
         color: var(--text-main);
         line-height: 1.6;
+        transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      }
+
+      .detail-text-box.detersivi-box {
+        background: var(--detersivi-box-bg);
+        border-color: var(--detersivi-border);
       }
 
       .detersivi-list {
@@ -505,7 +712,7 @@
         font-size: 14.5px;
         line-height: 1.55;
         font-weight: 600;
-        color: #1E3A8A;
+        color: var(--detersivi-color);
       }
 
       .detersivi-list li::before {
@@ -529,7 +736,7 @@
         width: 10px;
         height: 10px;
         border-radius: 50%;
-        background: #D9D2BF;
+        background: var(--dot-bg);
         border: none;
         cursor: pointer;
         padding: 0;
@@ -566,13 +773,14 @@
 
       /* Section 3: Notes Section */
       .notes-card {
-        background: #FFFDF7;
-        border: 2px dashed #D6C7A6;
+        background: var(--notes-bg);
+        border: 2px dashed var(--notes-border);
         border-radius: var(--radius-xl);
         padding: 22px 20px;
         margin-top: 18px;
         box-shadow: 0 4px 14px rgba(0,0,0,0.03);
         scroll-margin-top: 16px;
+        transition: background 0.2s ease, border-color 0.2s ease;
       }
 
       .notes-header {
@@ -580,7 +788,7 @@
         align-items: center;
         gap: 8px;
         margin-bottom: 14px;
-        border-bottom: 1.5px solid #EFE4CC;
+        border-bottom: 1.5px solid var(--notes-divider);
         padding-bottom: 10px;
       }
 
@@ -588,7 +796,7 @@
         font-family: var(--font-serif);
         font-size: 18px;
         font-weight: 700;
-        color: #794D18;
+        color: var(--notes-title);
         letter-spacing: 0.8px;
         text-transform: uppercase;
         line-height: 1.35;
@@ -606,7 +814,7 @@
         align-items: flex-start;
         gap: 12px;
         font-size: 14.5px;
-        color: #4A3A25;
+        color: var(--notes-color);
         font-weight: 500;
         line-height: 1.6;
       }
@@ -615,8 +823,8 @@
         width: 22px;
         height: 22px;
         border-radius: 50%;
-        background: #F9E7B5;
-        color: #8C5609;
+        background: var(--notes-check-bg);
+        color: var(--notes-check-color);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -626,9 +834,14 @@
         margin-top: 2px;
       }
 
+      .note-warning {
+        color: var(--danger-text);
+        font-weight: 600;
+      }
+
       /* Empty State */
       .empty-search {
-        background: white;
+        background: var(--card-bg);
         border: 2px dashed var(--accent-border);
         border-radius: var(--radius-xl);
         padding: 36px 16px;
@@ -666,7 +879,7 @@
         bottom: 0;
         left: 0;
         right: 0;
-        background: rgba(255, 255, 255, 0.95);
+        background: var(--nav-bg);
         backdrop-filter: blur(12px);
         -webkit-backdrop-filter: blur(12px);
         border-top: 1.5px solid var(--accent-border);
@@ -674,6 +887,7 @@
         padding-bottom: max(8px, env(safe-area-inset-bottom));
         z-index: 1000;
         box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.06);
+        transition: background 0.25s ease, border-color 0.25s ease;
       }
 
       .bottom-nav-inner {
@@ -715,7 +929,7 @@
 
       .bottom-tab-btn.active {
         color: var(--header-blue-dark);
-        background: #F1F6F9;
+        background: var(--nav-btn-active);
       }
 
       .bottom-tab-btn.active svg {
@@ -738,6 +952,10 @@
       
       <!-- Vintage-Modern Signboard Header -->
       <header class="poster-header" id="section-top">
+        <button id="themeToggleBtn" class="theme-toggle-btn" onclick="toggleTheme()" aria-label="Attiva modalità notte" title="Cambia tema chiaro/scuro">
+          <span class="theme-toggle-icon" id="themeToggleIcon" aria-hidden="true">🌙</span>
+          <span class="theme-toggle-text" id="themeToggleText">Notte</span>
+        </button>
         <div class="header-icon-badge">
           <!-- Washing Machine SVG Icon -->
           <svg viewBox="0 0 24 24">
@@ -997,6 +1215,7 @@
 
       // 3. INITIALIZE
       function initLaundryApp() {
+        initTheme();
         renderNotes();
         renderCards();
         setupSearchInput();
@@ -1029,7 +1248,7 @@
           .replace("spruzzino è sgrassatore", "<strong>spruzzino è sgrassatore</strong>")
           .replace("borsina media", "<strong>borsina media</strong>")
           .replace("borsina triangolare grande", "<strong>borsina triangolare grande</strong>")
-          .replace("(mai lanciati liberi in lavatrice)", "<span style='color: #C0392B; font-weight:600;'>(mai lanciati liberi in lavatrice)</span>");
+          .replace("(mai lanciati liberi in lavatrice)", "<span class='note-warning'>(mai lanciati liberi in lavatrice)</span>");
       }
 
       // 5. RENDER HORIZONTAL CARDS
@@ -1071,7 +1290,7 @@
         // Render Cards
         track.innerHTML = visiblePrograms.map((program, idx) => {
           return `
-            <article class="carousel-card" id="card-${program.id}" data-index="${idx}">
+            <article class="carousel-card ${idx === currentIndex ? 'active-card' : ''}" id="card-${program.id}" data-index="${idx}" onclick="onCardClicked(${idx})">
               <header class="card-header-banner">
                 <div class="card-title-group">
                   <h2>${program.nome}</h2>
@@ -1122,7 +1341,7 @@
                   <div class="detail-label">
                     <span>🧴</span> Detersivi & Additivi
                   </div>
-                  <div class="detail-text-box" style="background: #F4F8FA; border-color: #D3E2EC;">
+                  <div class="detail-text-box detersivi-box">
                     <ul class="detersivi-list">
                       ${program.detersivi.map(d => `<li>${d}</li>`).join("")}
                     </ul>
@@ -1140,87 +1359,197 @@
 
         updateCounter();
         updateArrows();
+        updateActiveCard();
 
         // Scroll cleanly to current card
         goToCard(currentIndex, 'auto');
       }
 
-      // 6. CAROUSEL NAVIGATION & DRAGGING (TRASICAMENTO LATERALE)
+      // 6. CAROUSEL NAVIGATION & DRAGGING (TRASLAMENTO LATERALE FLUIDO)
+      function updateActiveCard() {
+        const track = document.getElementById("cardsScrollTrack");
+        if (!track) return;
+        const cards = track.querySelectorAll(".carousel-card");
+        cards.forEach((card, idx) => {
+          card.classList.toggle("active-card", idx === currentIndex);
+        });
+      }
+
+      let didDragRecently = false;
+      let dragTimer = null;
+
+      function setDraggedRecently() {
+        didDragRecently = true;
+        if (dragTimer) clearTimeout(dragTimer);
+        dragTimer = setTimeout(() => {
+          didDragRecently = false;
+        }, 180);
+      }
+
+      function onCardClicked(idx) {
+        if (didDragRecently) return;
+        if (idx !== currentIndex && idx >= 0 && idx < visiblePrograms.length) {
+          goToCard(idx, 'smooth');
+        }
+      }
+
       function goToCard(index, behavior = 'smooth') {
         const track = document.getElementById("cardsScrollTrack");
+        if (!track) return;
         const cards = track.querySelectorAll(".carousel-card");
         if (cards[index]) {
           currentIndex = index;
-          cards[index].scrollIntoView({ behavior, inline: 'center', block: 'nearest' });
+          const card = cards[index];
+          // Calculate exact horizontal offset so the card is centered in the track,
+          // without triggering any vertical jumping of the window!
+          const targetLeft = card.offsetLeft - (track.clientWidth - card.clientWidth) / 2;
+          track.scrollTo({
+            left: Math.max(0, targetLeft),
+            behavior: behavior
+          });
           updateDots();
           updateCounter();
           updateArrows();
+          updateActiveCard();
         }
       }
 
       function slideCarousel(direction) {
         const nextIndex = currentIndex + direction;
         if (nextIndex >= 0 && nextIndex < visiblePrograms.length) {
-          goToCard(nextIndex);
+          goToCard(nextIndex, 'smooth');
         }
       }
 
-      // DRAG-TO-SCROLL IMPLEMENTATION (Pointer & Touch Events)
+      // DUAL TOUCH & MOUSE SWIPE (TRASLAMENTO FLUIDO CON IL DITO O CON IL MOUSE)
       function setupDragToScroll() {
         const track = document.getElementById("cardsScrollTrack");
-        let isPointerDown = false;
-        let startX = 0;
-        let scrollStartLeft = 0;
-        let hasMoved = false;
+        if (!track) return;
 
-        track.addEventListener("pointerdown", (e) => {
-          // Allow only primary button
-          if (e.button !== 0 && e.pointerType === "mouse") return;
-          isPointerDown = true;
-          hasMoved = false;
-          startX = e.pageX;
-          scrollStartLeft = track.scrollLeft;
+        // --- 1. TOUCH SWIPING (Per smartphone, tablet e schermi touch) ---
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let touchScrollStart = 0;
+        let touchLocked = false;
+        let isHorizontalSwipe = false;
+        let touchDiffX = 0;
+
+        track.addEventListener("touchstart", (e) => {
+          if (e.touches.length !== 1) return;
+          const touch = e.touches[0];
+          touchStartX = touch.clientX;
+          touchStartY = touch.clientY;
+          touchScrollStart = track.scrollLeft;
+          touchLocked = false;
+          isHorizontalSwipe = false;
+          touchDiffX = 0;
+        }, { passive: true });
+
+        track.addEventListener("touchmove", (e) => {
+          if (e.touches.length !== 1) return;
+          const touch = e.touches[0];
+          touchDiffX = touch.clientX - touchStartX;
+          const diffY = touch.clientY - touchStartY;
+
+          // Rileva l'intenzione del gesto dopo 6px di movimento
+          if (!touchLocked) {
+            const absX = Math.abs(touchDiffX);
+            const absY = Math.abs(diffY);
+            if (absX > 6 || absY > 6) {
+              touchLocked = true;
+              if (absX > absY) {
+                // Gesto orizzontale: l'utente vuole cambiare scheda programma
+                isHorizontalSwipe = true;
+                track.classList.add("grabbing");
+              } else {
+                // Gesto verticale: l'utente sta scorrendo la pagina verso il basso/alto
+                isHorizontalSwipe = false;
+              }
+            }
+          }
+
+          if (isHorizontalSwipe) {
+            track.scrollLeft = touchScrollStart - touchDiffX;
+          }
+        }, { passive: true });
+
+        const endTouchSwipe = () => {
+          if (isHorizontalSwipe) {
+            track.classList.remove("grabbing");
+            isHorizontalSwipe = false;
+            touchLocked = false;
+            if (Math.abs(touchDiffX) > 8) {
+              setDraggedRecently();
+            }
+            const threshold = 35; // soglia minima di scorrimento in pixel
+            if (touchDiffX < -threshold && currentIndex < visiblePrograms.length - 1) {
+              goToCard(currentIndex + 1, 'smooth');
+            } else if (touchDiffX > threshold && currentIndex > 0) {
+              goToCard(currentIndex - 1, 'smooth');
+            } else {
+              goToCard(currentIndex, 'smooth');
+            }
+          }
+        };
+
+        track.addEventListener("touchend", endTouchSwipe, { passive: true });
+        track.addEventListener("touchcancel", endTouchSwipe, { passive: true });
+
+        // --- 2. MOUSE DRAGGING (Per desktop) ---
+        let isMouseDown = false;
+        let mouseStartX = 0;
+        let mouseScrollStart = 0;
+        let mouseDiffX = 0;
+
+        track.addEventListener("mousedown", (e) => {
+          if (e.button !== 0) return;
+          if (e.target.closest("button") || e.target.closest("input") || e.target.closest("a")) return;
+
+          isMouseDown = true;
+          mouseStartX = e.pageX;
+          mouseScrollStart = track.scrollLeft;
+          mouseDiffX = 0;
           track.classList.add("grabbing");
         });
 
-        window.addEventListener("pointermove", (e) => {
-          if (!isPointerDown) return;
-          const diffX = e.pageX - startX;
-          if (Math.abs(diffX) > 4) {
-            hasMoved = true;
-          }
-          track.scrollLeft = scrollStartLeft - diffX;
+        window.addEventListener("mousemove", (e) => {
+          if (!isMouseDown) return;
+          mouseDiffX = e.pageX - mouseStartX;
+          track.scrollLeft = mouseScrollStart - mouseDiffX;
         });
 
-        const stopDrag = (e) => {
-          if (!isPointerDown) return;
-          isPointerDown = false;
+        const stopMouseDrag = () => {
+          if (!isMouseDown) return;
+          isMouseDown = false;
           track.classList.remove("grabbing");
-
-          // When releasing, snap cleanly to nearest card
-          setTimeout(() => {
-            snapToNearestCard();
-          }, 40);
+          if (Math.abs(mouseDiffX) > 8) {
+            setDraggedRecently();
+          }
+          const threshold = 35;
+          if (mouseDiffX < -threshold && currentIndex < visiblePrograms.length - 1) {
+            goToCard(currentIndex + 1, 'smooth');
+          } else if (mouseDiffX > threshold && currentIndex > 0) {
+            goToCard(currentIndex - 1, 'smooth');
+          } else if (Math.abs(mouseDiffX) > 5) {
+            goToCard(currentIndex, 'smooth');
+          }
         };
 
-        window.addEventListener("pointerup", stopDrag);
-        window.addEventListener("pointercancel", stopDrag);
+        window.addEventListener("mouseup", stopMouseDrag);
       }
 
       function snapToNearestCard() {
         const track = document.getElementById("cardsScrollTrack");
+        if (!track) return;
         const cards = track.querySelectorAll(".carousel-card");
         if (!cards.length) return;
 
-        const trackRect = track.getBoundingClientRect();
-        const trackCenter = trackRect.left + trackRect.width / 2;
-
+        const trackCenter = track.scrollLeft + track.clientWidth / 2;
         let closestIndex = 0;
         let minDistance = Infinity;
 
         cards.forEach((card, idx) => {
-          const rect = card.getBoundingClientRect();
-          const cardCenter = rect.left + rect.width / 2;
+          const cardCenter = card.offsetLeft + card.clientWidth / 2;
           const dist = Math.abs(trackCenter - cardCenter);
           if (dist < minDistance) {
             minDistance = dist;
@@ -1231,30 +1560,28 @@
         goToCard(closestIndex, 'smooth');
       }
 
+      let carouselRafId = null;
+
       function setupScrollListener() {
         const track = document.getElementById("cardsScrollTrack");
-        let isScrollingTimeout;
+        if (!track) return;
 
         track.addEventListener("scroll", () => {
-          if (track.classList.contains("grabbing")) return; // skip while dragging actively
-
-          clearTimeout(isScrollingTimeout);
-          isScrollingTimeout = setTimeout(() => {
+          if (carouselRafId) return;
+          carouselRafId = requestAnimationFrame(() => {
+            carouselRafId = null;
             const cards = track.querySelectorAll(".carousel-card");
             if (!cards.length) return;
 
-            const trackRect = track.getBoundingClientRect();
-            const trackCenter = trackRect.left + trackRect.width / 2;
-
+            const trackCenter = track.scrollLeft + track.clientWidth / 2;
             let closestIndex = 0;
             let minDistance = Infinity;
 
             cards.forEach((card, idx) => {
-              const rect = card.getBoundingClientRect();
-              const cardCenter = rect.left + rect.width / 2;
-              const distance = Math.abs(trackCenter - cardCenter);
-              if (distance < minDistance) {
-                minDistance = distance;
+              const cardCenter = card.offsetLeft + card.clientWidth / 2;
+              const dist = Math.abs(trackCenter - cardCenter);
+              if (dist < minDistance) {
+                minDistance = dist;
                 closestIndex = idx;
               }
             });
@@ -1264,8 +1591,9 @@
               updateDots();
               updateCounter();
               updateArrows();
+              updateActiveCard();
             }
-          }, 60);
+          });
         }, { passive: true });
       }
 
@@ -1342,48 +1670,148 @@
       }
 
       // 8. BOTTOM NAVIGATION BAR LOGIC
+      let isUserNavigating = false;
+      let navScrollLockTimer = null;
+
       function navigateToSection(sectionId, tabKey) {
+        // Blocca temporaneamente l'aggiornamento durante lo scroll animato per evitare sfarfallii
+        isUserNavigating = true;
+        if (navScrollLockTimer) clearTimeout(navScrollLockTimer);
+        navScrollLockTimer = setTimeout(() => {
+          isUserNavigating = false;
+        }, 900);
+
+        setActiveNavTab(tabKey);
+
+        if (tabKey === 'cerca') {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+          setTimeout(() => {
+            const input = document.getElementById("searchInput");
+            if (input) input.focus();
+          }, 350);
+          return;
+        }
+
         const target = document.getElementById(sectionId);
         if (target) {
-          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          setActiveNavTab(tabKey);
-          
-          if (tabKey === 'cerca') {
-            setTimeout(() => {
-              const input = document.getElementById("searchInput");
-              if (input) input.focus();
-            }, 300);
-          }
+          const yOffset = -18;
+          const targetY = target.getBoundingClientRect().top + window.pageYOffset + yOffset;
+          window.scrollTo({ top: Math.max(0, targetY), behavior: 'smooth' });
         }
       }
 
       function setActiveNavTab(tabKey) {
-        document.getElementById("navTabCerca").classList.toggle("active", tabKey === 'cerca');
-        document.getElementById("navTabProgrammi").classList.toggle("active", tabKey === 'programmi');
-        document.getElementById("navTabNote").classList.toggle("active", tabKey === 'note');
+        const tabCerca = document.getElementById("navTabCerca");
+        const tabProgrammi = document.getElementById("navTabProgrammi");
+        const tabNote = document.getElementById("navTabNote");
+
+        if (tabCerca) tabCerca.classList.toggle("active", tabKey === 'cerca');
+        if (tabProgrammi) tabProgrammi.classList.toggle("active", tabKey === 'programmi');
+        if (tabNote) tabNote.classList.toggle("active", tabKey === 'note');
       }
 
-      // Auto update active bottom tab based on scroll position
+      // Rileva in modo accurato e stabile la sezione visibile durante lo scroll senza rimbalzare su 'programmi'
       function setupSectionObserver() {
-        const sections = [
-          { id: 'section-cerca', key: 'cerca' },
-          { id: 'section-programmi', key: 'programmi' },
-          { id: 'section-note', key: 'note' }
-        ];
+        let navRafId = null;
+
+        const updateTabFromScroll = () => {
+          if (isUserNavigating) return;
+
+          const scrollY = window.scrollY || window.pageYOffset || 0;
+          const viewportHeight = window.innerHeight;
+          const docHeight = Math.max(
+            document.body.scrollHeight,
+            document.documentElement.scrollHeight,
+            document.body.offsetHeight,
+            document.documentElement.offsetHeight
+          );
+
+          // 1. Se l'utente è arrivato in fondo alla pagina (o entro 80px), attiva 'note'
+          if (scrollY + viewportHeight >= docHeight - 80) {
+            setActiveNavTab('note');
+            return;
+          }
+
+          // 2. Se l'utente si trova nella parte alta della pagina, attiva 'cerca'
+          if (scrollY < 140) {
+            setActiveNavTab('cerca');
+            return;
+          }
+
+          const elProg = document.getElementById('section-programmi');
+          const elNote = document.getElementById('section-note');
+
+          if (!elProg || !elNote) return;
+
+          const progRect = elProg.getBoundingClientRect();
+          const noteRect = elNote.getBoundingClientRect();
+          const focalPoint = viewportHeight * 0.40;
+
+          // Valuta l'ingresso delle sezioni rispetto al punto focale
+          if (noteRect.top <= focalPoint) {
+            setActiveNavTab('note');
+          } else if (progRect.top <= focalPoint) {
+            setActiveNavTab('programmi');
+          } else {
+            setActiveNavTab('cerca');
+          }
+        };
 
         window.addEventListener('scroll', () => {
-          const scrollPos = window.scrollY + 140;
-          let currentKey = 'programmi';
-
-          for (const s of sections) {
-            const el = document.getElementById(s.id);
-            if (el && el.offsetTop <= scrollPos) {
-              currentKey = s.key;
-            }
-          }
-          setActiveNavTab(currentKey);
+          if (navRafId) return;
+          navRafId = requestAnimationFrame(() => {
+            navRafId = null;
+            updateTabFromScroll();
+          });
         }, { passive: true });
+
+        // Verifica iniziale al caricamento
+        updateTabFromScroll();
       }
+
+      // 9. THEME (DARK / LIGHT MODE) CONTROLLER
+      function initTheme() {
+        const savedTheme = localStorage.getItem('lavatrice_theme');
+        const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const isDark = savedTheme === 'dark' || (!savedTheme && systemPrefersDark);
+        applyTheme(isDark);
+
+        // Listen for system theme preference changes if user hasn't explicitly set a custom choice
+        if (window.matchMedia) {
+          window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+            if (!localStorage.getItem('lavatrice_theme')) {
+              applyTheme(e.matches);
+            }
+          });
+        }
+      }
+
+      function toggleTheme() {
+        const isDark = document.body.classList.contains('dark-mode');
+        const nextDark = !isDark;
+        applyTheme(nextDark);
+        try {
+          localStorage.setItem('lavatrice_theme', nextDark ? 'dark' : 'light');
+        } catch (e) {
+          // Ignore private browsing storage quota issues
+        }
+      }
+
+      function applyTheme(isDark) {
+        document.body.classList.toggle('dark-mode', isDark);
+        const icon = document.getElementById('themeToggleIcon');
+        const text = document.getElementById('themeToggleText');
+        const btn = document.getElementById('themeToggleBtn');
+        if (icon) icon.textContent = isDark ? '☀️' : '🌙';
+        if (text) text.textContent = isDark ? 'Giorno' : 'Notte';
+        if (btn) {
+          btn.setAttribute('aria-label', isDark ? 'Attiva modalità giorno' : 'Attiva modalità notte');
+          btn.setAttribute('title', isDark ? 'Passa alla modalità chiara' : 'Passa alla modalità notturna');
+        }
+      }
+
+      // Run theme initialization immediately
+      initTheme();
 
       // Explicit global window bindings for inline HTML handlers
       window.clearSearch = clearSearch;
@@ -1391,6 +1819,8 @@
       window.slideCarousel = slideCarousel;
       window.goToCard = goToCard;
       window.navigateToSection = navigateToSection;
+      window.toggleTheme = toggleTheme;
+      window.onCardClicked = onCardClicked;
     </script>
   </body>
 </html>
